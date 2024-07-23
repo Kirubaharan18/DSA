@@ -1,0 +1,135 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class TreeNode {
+    int val;
+    boolean locked;
+    int lockedBy;
+    List<TreeNode> children;
+    TreeNode parent;
+
+    public TreeNode(int val) {
+        this.val = val;
+        this.locked = false;
+        this.lockedBy = -1;
+        this.children = new ArrayList<>();
+        this.parent = null;
+    }
+}
+
+class NArayTree {
+    TreeNode root;
+
+    public NArayTree(int N, int[] parent) {
+        TreeNode[] nodes = new TreeNode[N];
+        for (int i = 0; i < N; i++) {
+            nodes[i] = new TreeNode(i);
+        }
+        for (int i = 0; i < N; i++) {
+            if (parent[i] == -1) {
+                root = nodes[i];
+            } else {
+                nodes[i].parent = nodes[parent[i]];
+                nodes[parent[i]].children.add(nodes[i]);
+            }
+        }
+    }
+
+    public boolean lock(int v, int id) {
+        TreeNode node = findNode(root, v);
+        if (canLock(node, id)) {
+            node.locked = true;
+            node.lockedBy = id;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unlock(int v, int id) {
+        TreeNode node = findNode(root, v);
+        if (node.locked && node.lockedBy == id) {
+            node.locked = false;
+            node.lockedBy = -1;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean upgrade(int v, int id) {
+        TreeNode node = findNode(root, v);
+        if (!node.locked && canUpgrade(node, id)) {
+            unlockDescendants(node);
+            node.locked = true;
+            node.lockedBy = id;
+            return true;
+        }
+        return false;
+    }
+
+    private TreeNode findNode(TreeNode node, int v) {
+        if (node == null) return null;
+        if (node.val == v) return node;
+        for (TreeNode child : node.children) {
+            TreeNode result = findNode(child, v);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    private boolean canLock(TreeNode node, int id) {
+        if (node == null || node.locked) return false;
+        TreeNode curr = node;
+        while (curr != null) {
+            if (curr.locked) return false; // Check ancestors
+            curr = curr.parent;
+        }
+        return !hasLockedDescendants(node);
+    }
+
+    private boolean canUpgrade(TreeNode node, int id) {
+        if (node == null || node.locked || hasLockedAncestors(node)) return false;
+        return hasLockedDescendants(node, id);
+    }
+
+    private boolean hasLockedAncestors(TreeNode node) {
+        TreeNode curr = node;
+        while (curr != null) {
+            if (curr.locked) return true;
+            curr = curr.parent;
+        }
+        return false;
+    }
+
+    private boolean hasLockedDescendants(TreeNode node, int id) {
+        if (node == null) return false;
+        if (node.locked && node.lockedBy != id) return true;
+        for (TreeNode child : node.children) {
+            if (hasLockedDescendants(child, id)) return true;
+        }
+        return false;
+    }
+
+    private void unlockDescendants(TreeNode node) {
+        if (node == null) return;
+        if (node.locked) {
+            node.locked = false;
+            node.lockedBy = -1;
+        }
+        for (TreeNode child : node.children) {
+            unlockDescendants(child);
+        }
+    }
+}
+
+public class TreeLockingAndUnlocking {
+    public static void main(String[] args) {
+        int N = 6;
+        int[] parent = { 5, -1, 1, 1, 5, 2 };
+        NArayTree tree = new NArayTree(N, parent);
+
+        System.out.println(tree.lock(4, 1)); // Lock node 4 by user 1
+        System.out.println(tree.lock(3, 2)); // Lock node 3 by user 2
+        System.out.println(tree.upgrade(1, 1)); // Upgrade node 1 to be locked by user 1
+        System.out.println(tree.unlock(4, 1)); // Unlock node 4 by user 1
+    }
+}
