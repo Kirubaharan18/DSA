@@ -1,0 +1,34 @@
+public class EggDrop {
+    public int eggDrop(int n, int k) {
+        int[][] dp = new int[n+1][k+1];
+
+        for (int i = 1; i <= n; i++) {
+            dp[i][1] = i; // With one egg, need to check every floor from 1 to i
+        }
+
+        for (int j = 1; j <= k; j++) {
+            dp[0][j] = 0; // Zero floors require zero drops
+            dp[1][j] = 1; // One floor requires one drop
+        }
+
+        for (int i = 2; i <= n; i++) {
+            for (int j = 2; j <= k; j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int x = 1; x <= i; x++) {
+                    int drops = 1 + Math.max(dp[x-1][j-1], dp[i-x][j]);
+                    dp[i][j] = Math.min(dp[i][j], drops);
+                }
+            }
+        }
+
+        return dp[n][k];
+    }
+
+    public static void main(String[] args) {
+        EggDrop eggDrop = new EggDrop();
+        int n = 100; // Number of floors
+        int k = 2;   // Number of eggs
+        int minDrops = eggDrop.eggDrop(n, k);
+        System.out.println("Minimum number of drops required in worst case: " + minDrops);
+    }
+}
