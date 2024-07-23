@@ -1,0 +1,44 @@
+import java.util.*;
+
+public class GraphMaxWeightNode {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // HashMap to store cumulative weights for each node
+        Map<Integer, Integer> nodeWeights = new HashMap<>();
+
+        // Reading pairs (node1, node2, weight)
+        while (scanner.hasNext()) {
+            int node1 = scanner.nextInt();
+            int node2 = scanner.nextInt();
+            int weight = scanner.nextInt();
+
+            // Update cumulative weights for node1
+            nodeWeights.put(node1, nodeWeights.getOrDefault(node1, 0) + weight);
+
+            // Update cumulative weights for node2
+            nodeWeights.put(node2, nodeWeights.getOrDefault(node2, 0) + weight);
+        }
+
+        scanner.close();
+
+        // Finding the node with maximum cumulative weight
+        int maxNode = -1;
+        int maxWeight = Integer.MIN_VALUE;
+
+        for (Map.Entry<Integer, Integer> entry : nodeWeights.entrySet()) {
+            int node = entry.getKey();
+            int weight = entry.getValue();
+
+            if (weight > maxWeight) {
+                maxWeight = weight;
+                maxNode = node;
+            }
+        }
+
+        // Output the node with maximum cumulative weight
+        System.out.println("Node with maximum sum weight: " + maxNode);
+        System.out.println("Maximum weight: " + maxWeight);
+    }
+}
