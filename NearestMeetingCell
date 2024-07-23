@@ -1,0 +1,73 @@
+import java.util.*;
+
+public class NearestMeetingCell {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int N = scanner.nextInt();
+        int[] edges = new int[N];
+        for (int i = 0; i < N; i++) {
+            edges[i] = scanner.nextInt();
+        }
+
+        int C1 = scanner.nextInt();
+        int C2 = scanner.nextInt();
+
+        scanner.close();
+
+        List<List<Integer>> pathsFromC1 = findPaths(edges, C1, N);
+        List<List<Integer>> pathsFromC2 = findPaths(edges, C2, N);
+
+        int nearestMeetingCell = findNearestMeetingCell(pathsFromC1, pathsFromC2);
+
+        System.out.println(nearestMeetingCell);
+    }
+
+    private static List<List<Integer>> findPaths(int[] edges, int startCell, int N) {
+        List<List<Integer>> paths = new ArrayList<>();
+        boolean[] visited = new boolean[N];
+        Queue<List<Integer>> queue = new LinkedList<>();
+        
+        queue.offer(new ArrayList<>(Collections.singletonList(startCell)));
+
+        while (!queue.isEmpty()) {
+            List<Integer> path = queue.poll();
+            int current = path.get(path.size() - 1);
+            visited[current] = true;
+
+            if (current == 0) {
+                paths.add(path);
+                continue;
+            }
+
+            int nextCell = edges[current];
+            if (nextCell != -1 && !visited[nextCell]) {
+                List<Integer> newPath = new ArrayList<>(path);
+                newPath.add(nextCell);
+                queue.offer(newPath);
+            }
+        }
+
+        return paths;
+    }
+
+    private static int findNearestMeetingCell(List<List<Integer>> pathsFromC1, List<List<Integer>> pathsFromC2) {
+        int minDistance = Integer.MAX_VALUE;
+        int nearestCell = -1;
+
+        Set<List<Integer>> set = new HashSet<>(pathsFromC1);
+
+        for (List<Integer> path : pathsFromC2) {
+            if (set.contains(path)) {
+                int distance = path.size() - 1; // distance from root (0) to meeting cell
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestCell = path.get(distance);
+                }
+            }
+        }
+
+        return nearestCell;
+    }
+}
