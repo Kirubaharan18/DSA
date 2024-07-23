@@ -15,8 +15,8 @@ class TreeTraversal {
             }
 
             current = stack.pop();
-            System.out.print(current.val + " ");  // Visit the node
-            current = current.right;  // Move to the right child
+            System.out.print(current.val + " "); 
+            current = current.right;  // Move to
         }
     }
 
