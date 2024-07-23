@@ -1,6 +1,4 @@
 import java.util.*;
-
-// Class representing a graph
 class Graph {
     private int V; 
     private List<Integer>[] adj; 
