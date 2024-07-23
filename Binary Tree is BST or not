@@ -10,7 +10,7 @@ class Node {
     }
 };
 
-public class GFG {
+public class  {
     static int maxValue(Node node)
     {
         if (node == null) {
