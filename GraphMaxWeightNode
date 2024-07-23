@@ -12,10 +12,8 @@ public class GraphMaxWeightNode {
             int node2 = scanner.nextInt();
             int weight = scanner.nextInt();
 
-            // Update cumulative weights for node1
             nodeWeights.put(node1, nodeWeights.getOrDefault(node1, 0) + weight);
 
-            // Update cumulative weights for node2
             nodeWeights.put(node2, nodeWeights.getOrDefault(node2, 0) + weight);
         }
 
@@ -34,7 +32,6 @@ public class GraphMaxWeightNode {
             }
         }
 
-        // Output the node with maximum cumulative weight
         System.out.println("Node with maximum sum weight: " + maxNode);
         System.out.println("Maximum weight: " + maxWeight);
     }
