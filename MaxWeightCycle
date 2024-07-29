@@ -13,8 +13,8 @@ class Edge {
 public class MaxWeightCycle {
 
     public static void main(String[] args) {
-        int V = 5; // Number of vertices
-        int E = 8; // Number of edges
+        int V = 5; 
+        int E = 8;
 
         Edge[] edges = {
             new Edge(0, 1, -1),
@@ -24,7 +24,7 @@ public class MaxWeightCycle {
             new Edge(1, 4, 2),
             new Edge(3, 2, 5),
             new Edge(3, 1, 1),
-            new Edge(4, 3, -3)
+            new Edge(4, 3, -3),
         };
 
         int[] maxWeights = new int[V];
