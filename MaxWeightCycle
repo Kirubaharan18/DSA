@@ -9,12 +9,11 @@ class Edge {
         this.weight = weight;
     }
 }
-
 public class MaxWeightCycle {
 
     public static void main(String[] args) {
         int V = 5; 
-        int E = 8;
+        in\\t E = 8;
 
         Edge[] edges = {
             new Edge(0, 1, -1),
@@ -70,7 +69,6 @@ public class MaxWeightCycle {
             }
 
             cycle.add(current);
-
             System.out.println("Maximum weight cycle:");
             for (int i = cycle.size() - 1; i >= 0; i--) {
                 System.out.print(cycle.get(i) + " ");
